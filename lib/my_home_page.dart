@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 // こちらが　MyHomePage
 // StatefulWidget に関しても後で説明するよ！！！！！
@@ -20,6 +23,18 @@ class _MyHomePageState extends State<MyHomePage> {
       _counter++;
     });
   }
+
+  Future<void> getRepo() async {
+    var url = Uri.https('api.github.com', 'users/Kato4B61746F/repos');
+    var response = await http.get(url);
+    // print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
+    final List response2 = jsonDecode(response.body); 
+    print(response2[0]);
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +63,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       // 右下のプラスボタン（Floating Action Button と言います）
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () {
+          getRepo();
+        },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),
